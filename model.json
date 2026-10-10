@@ -1,0 +1,164 @@
+{
+  "kind": "sql_database",
+  "version": "0.1.0",
+  "title": "SQL Database",
+  "description": "Run parameterized SQL queries on SQLite or PostgreSQL.",
+  "repository_url": "https://github.com/HackInvent/bloxmith-sql-database",
+  "bloxsmith_compatibility": [
+    "1.0.9"
+  ],
+  "tested_with_bloxsmith": "1.0.9",
+  "prerequisites": [
+    {
+      "type": "manual",
+      "name": "SQLite driver: Python standard-library sqlite3; no SQLite extension is ever loaded."
+    },
+    {
+      "type": "manual",
+      "name": "Optional PostgreSQL driver: psycopg 3 (psycopg>=3.1) in the Studio Python environment, a reachable PostgreSQL server and its password stored in the wallet."
+    }
+  ],
+  "locales": {
+    "en": "locales/en.json",
+    "fr": "locales/fr.json"
+  },
+  "ports": {
+    "inputs": [
+      {
+        "id": 1,
+        "name": "params",
+        "title": "params",
+        "accepts": [
+          "application/json",
+          "text/plain",
+          "message/*"
+        ],
+        "multiplicity": "one",
+        "required": true,
+        "execution_requirement": "required_for_execution"
+      }
+    ],
+    "outputs": [
+      {
+        "id": 1,
+        "name": "rows",
+        "title": "rows",
+        "emits": [
+          "application/json",
+          "message/*"
+        ],
+        "multiplicity": "many"
+      },
+      {
+        "id": 2,
+        "name": "result",
+        "title": "result",
+        "emits": [
+          "application/json",
+          "message/*"
+        ],
+        "multiplicity": "many"
+      },
+      {
+        "id": 3,
+        "name": "error",
+        "title": "error",
+        "emits": [
+          "application/json",
+          "message/*"
+        ],
+        "multiplicity": "many"
+      }
+    ]
+  },
+  "config": {
+    "driver": "sqlite",
+    "operation": "query",
+    "sql": "SELECT 1 AS ok",
+    "table": "",
+    "columns": [],
+    "conflict_columns": [],
+    "update_columns": [],
+    "statements": {},
+    "allow_writes": false,
+    "sqlite_file": "database.sqlite3",
+    "sqlite_max_database_mb": 256,
+    "pg_host": "",
+    "pg_port": 5432,
+    "pg_database": "",
+    "pg_user": "",
+    "pg_password_ref": "",
+    "pg_sslmode": "verify-full",
+    "pg_sslrootcert": "",
+    "timeout_sec": 30,
+    "max_rows": 1000,
+    "max_result_bytes": 1048576,
+    "max_params_bytes": 1048576,
+    "max_batch_rows": 1000,
+    "truncate_results": false
+  },
+  "port_capabilities": {
+    "can_add_inputs": false,
+    "can_add_outputs": false
+  },
+  "runtime": {
+    "initial_state": "waiting",
+    "runtime_executable": true,
+    "active_worker": true,
+    "centralized_executor": "generic",
+    "centralized_dependency_mode": "all_inputs",
+    "active_execution_policy": "on_each_event"
+  },
+  "ui_assets": {
+    "modal": [
+      {
+        "kind": "css",
+        "path": "assets/css/properties.css"
+      },
+      {
+        "kind": "css",
+        "path": "assets/css/settings.css"
+      },
+      {
+        "kind": "js",
+        "path": "assets/js/properties.js"
+      },
+      {
+        "kind": "js",
+        "path": "assets/js/settings.js"
+      },
+      {
+        "kind": "js",
+        "path": "assets/js/block_modal.js"
+      }
+    ],
+    "inspector_panel": [
+      {
+        "kind": "css",
+        "path": "assets/css/properties.css"
+      },
+      {
+        "kind": "css",
+        "path": "assets/css/settings.css"
+      },
+      {
+        "kind": "js",
+        "path": "assets/js/properties.js"
+      },
+      {
+        "kind": "js",
+        "path": "assets/js/settings.js"
+      },
+      {
+        "kind": "js",
+        "path": "assets/js/inspector_panel.js"
+      }
+    ],
+    "node_card": [
+      {
+        "kind": "css",
+        "path": "assets/css/node_card.css"
+      }
+    ]
+  }
+}

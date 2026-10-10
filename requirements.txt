@@ -1,0 +1,3 @@
+# Optional: only the PostgreSQL driver needs psycopg 3. SQLite uses the Python standard library.
+# The block imports psycopg lazily; without it, PostgreSQL nodes fail with an explicit "dependency" error.
+psycopg>=3.1

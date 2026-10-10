@@ -1,0 +1,160 @@
+[
+  {
+    "key": "driver",
+    "type": "select",
+    "options": ["sqlite", "postgresql"],
+    "help": "sqlite uses a private database file in this node's storage. postgresql connects to the server configured below."
+  },
+  {
+    "key": "operation",
+    "type": "select",
+    "options": ["query", "execute", "insert_rows", "upsert"],
+    "help": "query reads rows in a read-only transaction. execute, insert_rows and upsert write data and need allow_writes."
+  },
+  {
+    "key": "sql",
+    "type": "textarea",
+    "rows": 6,
+    "when": {"operation": ["query", "execute"]},
+    "help": "One statement. Bind message values with :name or %(name)s placeholders; values are never inserted into the SQL text."
+  },
+  {
+    "key": "table",
+    "when": {"operation": ["insert_rows", "upsert"]},
+    "help": "Target table, optionally schema.table. Names are quoted exactly as written."
+  },
+  {
+    "key": "columns",
+    "type": "json",
+    "rows": 2,
+    "when": {"operation": ["insert_rows", "upsert"]},
+    "help": "JSON array of column names. Every params object must provide each of them (null allowed); other keys are ignored."
+  },
+  {
+    "key": "conflict_columns",
+    "type": "json",
+    "rows": 2,
+    "when": {"operation": ["upsert"]},
+    "help": "Columns of the unique key used by ON CONFLICT, e.g. [\"sku\"]."
+  },
+  {
+    "key": "update_columns",
+    "type": "json",
+    "rows": 2,
+    "when": {"operation": ["upsert"]},
+    "help": "Columns updated on conflict. Empty updates every non-conflict column; all columns as conflict columns means DO NOTHING."
+  },
+  {
+    "key": "allow_writes",
+    "type": "boolean",
+    "help": "Writes stay disabled until this is checked. Each message is applied in one transaction: all of it or nothing."
+  },
+  {
+    "key": "sqlite_file",
+    "when": {"driver": ["sqlite"]},
+    "help": "File name inside this node's storage, ending in .sqlite3, .sqlite or .db. No folders, links or ATTACH."
+  },
+  {
+    "key": "pg_host",
+    "when": {"driver": ["postgresql"]},
+    "help": "Server host name, IP address or absolute Unix-socket directory. Nothing is contacted until a message arrives."
+  },
+  {
+    "key": "pg_port",
+    "type": "integer",
+    "min": 1,
+    "max": 65535,
+    "when": {"driver": ["postgresql"]},
+    "help": "Server port, usually 5432."
+  },
+  {
+    "key": "pg_database",
+    "when": {"driver": ["postgresql"]},
+    "help": "Database name."
+  },
+  {
+    "key": "pg_user",
+    "when": {"driver": ["postgresql"]},
+    "help": "Database role. Use a role with only the privileges this node needs."
+  },
+  {
+    "key": "pg_password_ref",
+    "when": {"driver": ["postgresql"]},
+    "help": "Wallet reference such as secret://workspace/pg_app, never the password itself. Empty sends no password."
+  },
+  {
+    "key": "pg_sslmode",
+    "type": "select",
+    "options": ["verify-full", "verify-ca", "require", "disable"],
+    "when": {"driver": ["postgresql"]},
+    "help": "TLS mode. verify-full checks the certificate and host name. disable is accepted only for local connections."
+  },
+  {
+    "key": "statements",
+    "type": "json",
+    "rows": 6,
+    "advanced": true,
+    "help": "Optional named statements, e.g. {\"init\":{\"operation\":\"execute\",\"sql\":\"CREATE TABLE ...\"}}. Select one with {\"$statement\":\"init\",\"$params\":{...}}."
+  },
+  {
+    "key": "timeout_sec",
+    "type": "integer",
+    "min": 1,
+    "max": 300,
+    "advanced": true,
+    "help": "Deadline for connecting, locks and every statement of one message. Stop interrupts the running statement."
+  },
+  {
+    "key": "max_rows",
+    "type": "integer",
+    "min": 1,
+    "max": 10000,
+    "advanced": true,
+    "help": "Maximum rows published on the rows output."
+  },
+  {
+    "key": "max_result_bytes",
+    "type": "integer",
+    "min": 1024,
+    "max": 8388608,
+    "advanced": true,
+    "help": "Maximum size of the published rows, in bytes."
+  },
+  {
+    "key": "truncate_results",
+    "type": "boolean",
+    "advanced": true,
+    "help": "When a limit is exceeded, publish the first rows with truncated true instead of failing."
+  },
+  {
+    "key": "max_batch_rows",
+    "type": "integer",
+    "min": 1,
+    "max": 10000,
+    "advanced": true,
+    "help": "Maximum parameter objects in one array message."
+  },
+  {
+    "key": "max_params_bytes",
+    "type": "integer",
+    "min": 1024,
+    "max": 8388608,
+    "advanced": true,
+    "help": "Maximum size of one params message, in bytes."
+  },
+  {
+    "key": "sqlite_max_database_mb",
+    "type": "integer",
+    "min": 1,
+    "max": 4096,
+    "advanced": true,
+    "when": {"driver": ["sqlite"]},
+    "help": "The SQLite file cannot grow beyond this size; a write that would exceed it fails and is rolled back."
+  },
+  {
+    "key": "pg_sslrootcert",
+    "advanced": true,
+    "when": {"driver": ["postgresql"]},
+    "help": "Optional CA certificate: an absolute PEM file path, or system for the system store (libpq 16+). Empty uses the libpq default."
+  }
+]
